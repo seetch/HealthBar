@@ -9,16 +9,24 @@ public class Main extends PluginBase {
 
     public void onEnable() {
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, new NukkitRunnable() {
-
             @Override
             public void run() {
-                try {
-                    for (Player p : getServer().getOnlinePlayers().values()) {
-                        if ((p.isSurvival() || p.isAdventure()) && !p.hasEffect(Effect.INVISIBILITY)) {
-                            p.setScoreTag("\u00A7f" + Math.floor(p.getHealth()) + " \u00A7c❤");
+                for (Player player : getServer().getOnlinePlayers().values()) {
+                    if ((player.isSurvival() || player.isAdventure()) && !player.hasEffect(Effect.INVISIBILITY)) {
+                        String displayHealth = "";
+                        float health = player.getHealth();
+                        if (health <= player.getMaxHealth()) {
+                            displayHealth = "\uE116";
                         }
+                        if (health <= (float) player.getMaxHealth() / 2) {
+                            displayHealth = "\uE117";
+                        }
+                        if (health <= 0) {
+                            displayHealth = "\uE118";
+                        }
+
+                        player.setScoreTag(displayHealth);
                     }
-                } catch (Exception ignore) {
                 }
             }
         }, 10, 10, true);
